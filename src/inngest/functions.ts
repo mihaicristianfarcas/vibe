@@ -147,7 +147,8 @@ export const codeAgentFunction = inngest.createFunction(
           data: {
             content: 'Something went wrong. Please try again.',
             role: 'ASSISTANT',
-            type: 'ERROR'
+            type: 'ERROR',
+            projectId: event.data.projectId
           }
         });
 
@@ -162,7 +163,8 @@ export const codeAgentFunction = inngest.createFunction(
               title: 'Fragment',
               files: result.state.data.files
             }
-          }
+          },
+          projectId: event.data.projectId
         }
       });
     });
