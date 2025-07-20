@@ -1,7 +1,7 @@
-import { inngest } from '@/inngest/client';
-import { prisma } from '@/lib/db';
-import { baseProcedure, createTRPCRouter } from '@/trpc/init';
-import z from 'zod';
+import { inngest } from '@/inngest/client'
+import { prisma } from '@/lib/db'
+import { baseProcedure, createTRPCRouter } from '@/trpc/init'
+import z from 'zod'
 
 export const messagesRouter = createTRPCRouter({
   create: baseProcedure
@@ -21,7 +21,7 @@ export const messagesRouter = createTRPCRouter({
           type: 'RESULT',
           projectId: input.projectId
         }
-      });
+      })
 
       await inngest.send({
         name: 'code-agent/run',
@@ -29,9 +29,9 @@ export const messagesRouter = createTRPCRouter({
           value: input.value,
           projectId: input.projectId
         }
-      });
+      })
 
-      return newMessage;
+      return newMessage
     }),
   getMany: baseProcedure
     .input(
@@ -48,7 +48,7 @@ export const messagesRouter = createTRPCRouter({
           fragment: true
         },
         orderBy: { updatedAt: 'asc' }
-      });
-      return messages;
+      })
+      return messages
     })
-});
+})

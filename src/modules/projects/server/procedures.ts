@@ -1,15 +1,18 @@
-import { inngest } from '@/inngest/client';
-import { prisma } from '@/lib/db';
-import { baseProcedure, createTRPCRouter } from '@/trpc/init';
-import z from 'zod';
-import { generateSlug } from 'random-word-slugs';
-import { TRPCError } from '@trpc/server';
+import { inngest } from '@/inngest/client'
+import { prisma } from '@/lib/db'
+import { baseProcedure, createTRPCRouter } from '@/trpc/init'
+import z from 'zod'
+import { generateSlug } from 'random-word-slugs'
+import { TRPCError } from '@trpc/server'
 
 export const projectsRouter = createTRPCRouter({
   create: baseProcedure
     .input(
       z.object({
-        value: z.string().min(1, { message: 'Value is required.' }).max(10000, { message: 'Value is too long.' })
+        value: z
+          .string()
+          .min(1, { message: 'Value is required.' })
+          .max(10000, { message: 'Value is too long.' })
       })
     )
     .mutation(async ({ input }) => {
@@ -26,7 +29,7 @@ export const projectsRouter = createTRPCRouter({
             }
           }
         }
-      });
+      })
 
       await inngest.send({
         name: 'code-agent/run',
@@ -34,16 +37,16 @@ export const projectsRouter = createTRPCRouter({
           value: input.value,
           projectId: newProject.id
         }
-      });
+      })
 
-      return newProject;
+      return newProject
     }),
   getMany: baseProcedure.query(async () => {
     const projects = await prisma.project.findMany({
       orderBy: { updatedAt: 'desc' }
       // include: { fragment: true }
-    });
-    return projects;
+    })
+    return projects
   }),
 
   getOne: baseProcedure
@@ -57,14 +60,14 @@ export const projectsRouter = createTRPCRouter({
         where: {
           id: input.id
         }
-      });
+      })
 
       if (!project) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Project not found!'
-        });
+        })
       }
-      return project;
+      return project
     })
-});
+})
