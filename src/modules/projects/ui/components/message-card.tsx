@@ -78,7 +78,7 @@ const AssistantMessage = ({
           aria-label='Wolf Logo'
           role='img'
         />
-        <span className='text-sm font-medium'>Vibe</span>
+        <span className='text-md font-medium'>Vibe</span>
         <span className='text-muted-foreground text-xs opacity-0 transition-opacity group-hover:opacity-100'>
           {format(createdAt, "HH:mm 'on' MMM dd, yyyy")}
         </span>
