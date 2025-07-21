@@ -64,7 +64,7 @@ const MessageLoading = () => {
           aria-label='Wolf Logo'
           role='img'
         />
-        <span className='text-sm font-medium'>Vibe</span>
+        <span className='text-md font-medium'>Vibe</span>
       </div>
       <div className='flex flex-col gap-y-4 pl-8.5'>
         <ShimmerMessages />
