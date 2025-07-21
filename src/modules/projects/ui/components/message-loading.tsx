@@ -41,7 +41,7 @@ const ShimmerMessages = () => {
         } while (newIndex === prev && messages.length > 1)
         return newIndex
       })
-    }, 2000)
+    }, 3000)
 
     return () => clearInterval(interval)
   }, [messages.length])
