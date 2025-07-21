@@ -1,3 +1,4 @@
+import ThemeResponsiveLogo from '@/components/theme-responsive-logo'
 import { Card } from '@/components/ui/card'
 import { Fragment, MessageRole, MessageType } from '@/generated/prisma'
 import { cn } from '@/lib/utils'
@@ -39,12 +40,7 @@ const FragmentCard = ({
       onClick={() => onFragmentClick(fragment)}
     >
       <Code2Icon className='mt-0.5 size-4' />
-      <div className='flex flex-1 flex-col'>
-        <span className='fontmedium line-clamp-1 text-sm'>
-          {fragment.title}
-        </span>
-        <span className='text-sm'>Preview</span>
-      </div>
+      <span className='line-clamp-1 text-sm font-medium'>{fragment.title}</span>
       <div className='mt-0.5 flex items-center justify-center'>
         <ChevronRightIcon className='size-4' />
       </div>
@@ -77,12 +73,10 @@ const AssistantMessage = ({
       )}
     >
       <div className='mb-2 flex items-center gap-2 pl-2'>
-        <Image
-          src='/logo.svg'
-          alt='Vibe'
-          width={18}
-          height={18}
-          className='shrink-0'
+        <ThemeResponsiveLogo
+          className='h-7 w-7'
+          aria-label='Wolf Logo'
+          role='img'
         />
         <span className='text-sm font-medium'>Vibe</span>
         <span className='text-muted-foreground text-xs opacity-0 transition-opacity group-hover:opacity-100'>
