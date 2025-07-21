@@ -1,3 +1,4 @@
+import Hint from '@/components/hint'
 import { Button } from '@/components/ui/button'
 import { Fragment } from '@/generated/prisma'
 import { ExternalLinkIcon, RefreshCcwIcon } from 'lucide-react'
@@ -24,38 +25,44 @@ const FragmentWeb = ({ data }: Props) => {
   return (
     <div className='flex h-full w-full flex-col'>
       <div className='bg-sidebar flex items-center gap-x-2 border-b p-2'>
-        <Button
-          size='sm'
-          variant='outline'
-          onClick={onRefresh}
-          title='Refresh view'
-        >
-          <RefreshCcwIcon />
-        </Button>
-        <Button
-          size='sm'
-          variant='outline'
-          onClick={handleCopy}
-          disabled={!data.sandboxUrl || copied}
-          className='flex-1 justify-start text-start font-normal'
-          title={copied ? 'Copied successfully!' : 'Click to copy'}
-        >
-          <span aria-label='Sandbox URL' className='truncate'>
-            {data.sandboxUrl}
-          </span>
-        </Button>
-        <Button
-          size='sm'
-          variant='outline'
-          onClick={() => {
-            if (!data.sandboxUrl) return
-            window.open(data.sandboxUrl, '_blank')
-          }}
-          disabled={!data.sandboxUrl}
-          title='Open in new tab'
-        >
-          <ExternalLinkIcon />
-        </Button>
+        <Hint text='Click to refresh view' side='bottom' align='start'>
+          <Button
+            size='sm'
+            variant='outline'
+            onClick={onRefresh}
+            title='Refresh view'
+          >
+            <RefreshCcwIcon />
+          </Button>
+        </Hint>
+        <Hint text='Click to copy' side='bottom' align='start'>
+          <Button
+            size='sm'
+            variant='outline'
+            onClick={handleCopy}
+            disabled={!data.sandboxUrl || copied}
+            className='flex-1 justify-start text-start font-normal'
+            title={copied ? 'Copied successfully!' : 'Click to copy'}
+          >
+            <span aria-label='Sandbox URL' className='truncate'>
+              {data.sandboxUrl}
+            </span>
+          </Button>
+        </Hint>
+        <Hint text='Open in a new tab' side='bottom' align='start'>
+          <Button
+            size='sm'
+            variant='outline'
+            onClick={() => {
+              if (!data.sandboxUrl) return
+              window.open(data.sandboxUrl, '_blank')
+            }}
+            disabled={!data.sandboxUrl}
+            title='Open in new tab'
+          >
+            <ExternalLinkIcon />
+          </Button>
+        </Hint>
       </div>
       <iframe
         key={fragmentKey}
