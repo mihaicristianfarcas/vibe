@@ -24,7 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
-import { getFileIcon, getIconUrl } from '@/lib/file-icons'
+import { getFileIcon, getFolderIcon, getIconUrl } from '@/lib/file-icons'
 import Image from 'next/image'
 
 type FileCollection = { [path: string]: string }
@@ -52,22 +52,117 @@ const FileBreadcrumb = ({
     return pathSegments.slice(0, index + 1).join('/')
   }
 
-  // Find direct children files of the clicked folder
-  const findFilesForPath = (partialPath: string) => {
-    return availableFiles.filter(file => {
+  // Find direct children files and directories of the clicked folder
+  const findFilesAndDirsForPath = (partialPath: string) => {
+    const directChildren: string[] = []
+    const directories = new Set<string>()
+
+    availableFiles.forEach(file => {
       const fileSegments = file.split('/')
       const partialSegments = partialPath.split('/')
 
-      // Only include direct children (exactly one level deeper)
-      if (fileSegments.length !== partialSegments.length + 1) return false
+      // Check if this file is in a subdirectory of the partial path
+      if (fileSegments.length > partialSegments.length) {
+        // Check if this file shares the same path up to the partial path length
+        let isInPath = true
+        for (let i = 0; i < partialSegments.length; i++) {
+          if (fileSegments[i] !== partialSegments[i]) {
+            isInPath = false
+            break
+          }
+        }
 
-      // Check if this file shares the same path up to the partial path length
-      for (let i = 0; i < partialSegments.length; i++) {
-        if (fileSegments[i] !== partialSegments[i]) return false
+        if (isInPath) {
+          // If it's exactly one level deeper, it's a direct child file
+          if (fileSegments.length === partialSegments.length + 1) {
+            directChildren.push(file)
+          } else {
+            // Otherwise, add the directory at the next level
+            const nextLevelPath = [
+              ...partialSegments,
+              fileSegments[partialSegments.length]
+            ].join('/')
+            directories.add(nextLevelPath)
+          }
+        }
       }
-
-      return true
     })
+
+    // Combine files and directories, with directories first
+    return [...Array.from(directories).sort(), ...directChildren.sort()]
+  }
+
+  const RecursiveDropdownItem = ({
+    itemPath,
+    itemName,
+    level = 0
+  }: {
+    itemPath: string
+    itemName: string
+    level?: number
+  }) => {
+    const isFile = availableFiles.includes(itemPath)
+    const childItems = !isFile ? findFilesAndDirsForPath(itemPath) : []
+
+    if (isFile || childItems.length === 0) {
+      return (
+        <DropdownMenuItem
+          onClick={() => onBreadcrumbClick(itemPath)}
+          className='flex cursor-pointer items-center gap-2'
+        >
+          <Image
+            src={getIconUrl(
+              isFile ? getFileIcon(itemName) : getFolderIcon(itemName, false)
+            )}
+            width={16}
+            height={16}
+            alt=''
+            className='flex-shrink-0'
+          />
+          <span>{itemName}</span>
+        </DropdownMenuItem>
+      )
+    }
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <DropdownMenuItem
+            onSelect={e => e.preventDefault()}
+            className='flex cursor-pointer items-center justify-between gap-2'
+          >
+            <div className='flex items-center gap-2'>
+              <Image
+                src={getIconUrl(getFolderIcon(itemName, false))}
+                width={16}
+                height={16}
+                alt=''
+                className='flex-shrink-0'
+              />
+              <span>{itemName}</span>
+            </div>
+            <span className='text-muted-foreground text-xs'>▶</span>
+          </DropdownMenuItem>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          side='right'
+          align='start'
+          className='max-h-64 overflow-y-auto'
+        >
+          {childItems.map(childPath => {
+            const childName = childPath.split('/').pop() || childPath
+            return (
+              <RecursiveDropdownItem
+                key={childPath}
+                itemPath={childPath}
+                itemName={childName}
+                level={level + 1}
+              />
+            )
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
   }
 
   const BreadcrumbDropdown = ({
@@ -77,18 +172,19 @@ const FileBreadcrumb = ({
     partialPath: string
     segment: string
   }) => {
-    const matchingFiles = findFilesForPath(partialPath)
+    const matchingItems = findFilesAndDirsForPath(partialPath)
 
-    if (matchingFiles.length === 0) {
+    if (matchingItems.length === 0) {
       return <span className='text-muted-foreground'>{segment}</span>
     }
 
-    if (matchingFiles.length === 1) {
+    if (matchingItems.length === 1) {
+      const item = matchingItems[0]
       return (
         <Button
           variant='ghost'
           size='sm'
-          onClick={() => onBreadcrumbClick(matchingFiles[0])}
+          onClick={() => onBreadcrumbClick(item)}
         >
           {segment}
         </Button>
@@ -103,23 +199,14 @@ const FileBreadcrumb = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='start' className='max-h-64 overflow-y-auto'>
-          {matchingFiles.map(filePath => {
-            const fileName = filePath.split('/').pop() || filePath
+          {matchingItems.map(itemPath => {
+            const itemName = itemPath.split('/').pop() || itemPath
             return (
-              <DropdownMenuItem
-                key={filePath}
-                onClick={() => onBreadcrumbClick(filePath)}
-                className='flex cursor-pointer items-center gap-2'
-              >
-                <Image
-                  src={getIconUrl(getFileIcon(fileName))}
-                  width={16}
-                  height={16}
-                  alt=''
-                  className='flex-shrink-0'
-                />
-                {fileName}
-              </DropdownMenuItem>
+              <RecursiveDropdownItem
+                key={itemPath}
+                itemPath={itemPath}
+                itemName={itemName}
+              />
             )
           })}
         </DropdownMenuContent>
