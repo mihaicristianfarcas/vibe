@@ -8,8 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarProvider,
-  SidebarRail
+  SidebarProvider
 } from './ui/sidebar'
 import {
   Collapsible,
@@ -116,7 +115,6 @@ const TreeView = ({ data, value, onSelect }: TreeViewProps) => {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarRail />
       </Sidebar>
     </SidebarProvider>
   )

@@ -87,6 +87,7 @@ const FileBreadcrumb = ({
       return (
         <Button
           variant='ghost'
+          size='sm'
           onClick={() => onBreadcrumbClick(matchingFiles[0])}
         >
           {segment}
@@ -97,7 +98,9 @@ const FileBreadcrumb = ({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost'>{segment}</Button>
+          <Button variant='ghost' size='sm'>
+            {segment}
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='start' className='max-h-64 overflow-y-auto'>
           {matchingFiles.map(filePath => {
@@ -217,18 +220,10 @@ const FileExplorer = ({ files }: FileExplorerProps) => {
 
   return (
     <ResizablePanelGroup direction='horizontal'>
-      <ResizablePanel defaultSize={25} minSize={15} className='bg-sidebar'>
-        <TreeView
-          data={treeData}
-          value={selectedFile}
-          onSelect={handleFileSelect}
-        />
-      </ResizablePanel>
-      <ResizableHandle className='hover:bg-primary transition-colors' />
       <ResizablePanel defaultSize={75} minSize={50}>
         {selectedFile && files[selectedFile] ? (
           <div className='flex h-full w-full flex-col'>
-            <div className='bg-sidebar flex items-center justify-between gap-x-2 border-b px-4 py-2'>
+            <div className='bg-background flex items-center justify-between gap-x-2 border-b px-2 py-2'>
               <FileBreadcrumb
                 filePath={selectedFile}
                 onBreadcrumbClick={handleFileSelect}
@@ -237,7 +232,7 @@ const FileExplorer = ({ files }: FileExplorerProps) => {
               <Hint text='Copy to clipboard' side='bottom'>
                 <Button
                   variant='outline'
-                  size='icon'
+                  size='sm'
                   className='ml-auto'
                   onClick={handleCopy}
                   disabled={copied}
@@ -258,6 +253,14 @@ const FileExplorer = ({ files }: FileExplorerProps) => {
             <p>Select a file to view it&apos;s content</p>
           </div>
         )}
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={25} minSize={15} className='bg-sidebar'>
+        <TreeView
+          data={treeData}
+          value={selectedFile}
+          onSelect={handleFileSelect}
+        />
       </ResizablePanel>
     </ResizablePanelGroup>
   )
