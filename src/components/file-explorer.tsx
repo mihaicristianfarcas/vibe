@@ -24,7 +24,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
-import { ChevronDownIcon } from 'lucide-react'
 import { getFileIcon, getIconUrl } from '@/lib/file-icons'
 import Image from 'next/image'
 
@@ -98,10 +97,7 @@ const FileBreadcrumb = ({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost'>
-            {segment}
-            <ChevronDownIcon className='h-3 w-3' />
-          </Button>
+          <Button variant='ghost'>{segment}</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='start' className='max-h-64 overflow-y-auto'>
           {matchingFiles.map(filePath => {
