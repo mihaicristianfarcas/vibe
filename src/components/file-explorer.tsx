@@ -18,6 +18,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from './ui/breadcrumb'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from './ui/dropdown-menu'
+import { ChevronDownIcon } from 'lucide-react'
 
 type FileCollection = { [path: string]: string }
 
@@ -28,16 +35,95 @@ function getLanguageFromExtension(filename: string): string {
 
 interface FileBreadcrumbProps {
   filePath: string
+  onBreadcrumbClick: (path: string) => void
+  availableFiles: string[]
 }
 
-const FileBreadcrumb = ({ filePath }: FileBreadcrumbProps) => {
+const FileBreadcrumb = ({
+  filePath,
+  onBreadcrumbClick,
+  availableFiles
+}: FileBreadcrumbProps) => {
   const pathSegments = filePath.split('/')
-  const MAX_SEGMENTS = 3
+  const MAX_SEGMENTS = 4
+
+  const getPathAtIndex = (index: number) => {
+    return pathSegments.slice(0, index + 1).join('/')
+  }
+
+  // Find direct children files of the clicked folder
+  const findFilesForPath = (partialPath: string) => {
+    return availableFiles.filter(file => {
+      const fileSegments = file.split('/')
+      const partialSegments = partialPath.split('/')
+
+      // Only include direct children (exactly one level deeper)
+      if (fileSegments.length !== partialSegments.length + 1) return false
+
+      // Check if this file shares the same path up to the partial path length
+      for (let i = 0; i < partialSegments.length; i++) {
+        if (fileSegments[i] !== partialSegments[i]) return false
+      }
+
+      return true
+    })
+  }
+
+  const BreadcrumbDropdown = ({
+    partialPath,
+    segment
+  }: {
+    partialPath: string
+    segment: string
+  }) => {
+    const matchingFiles = findFilesForPath(partialPath)
+
+    if (matchingFiles.length === 0) {
+      return <span className='text-muted-foreground'>{segment}</span>
+    }
+
+    if (matchingFiles.length === 1) {
+      return (
+        <button
+          className='text-muted-foreground hover:text-foreground cursor-pointer transition-colors'
+          onClick={() => onBreadcrumbClick(matchingFiles[0])}
+        >
+          {segment}
+        </button>
+      )
+    }
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className='text-muted-foreground hover:text-foreground flex cursor-pointer items-center gap-1 transition-colors'>
+            {segment}
+            <ChevronDownIcon className='h-3 w-3' />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='start' className='max-h-64 overflow-y-auto'>
+          {matchingFiles.map(filePath => {
+            const fileName = filePath.split('/').pop() || filePath
+            return (
+              <DropdownMenuItem
+                key={filePath}
+                onClick={() => onBreadcrumbClick(filePath)}
+                className='cursor-pointer'
+              >
+                {fileName}
+              </DropdownMenuItem>
+            )
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
 
   const renderBreadcrumbItems = () => {
     if (pathSegments.length <= MAX_SEGMENTS) {
       return pathSegments.map((segment, index) => {
         const isLast = index === pathSegments.length - 1
+        const partialPath = getPathAtIndex(index)
 
         return (
           <Fragment key={index}>
@@ -47,7 +133,10 @@ const FileBreadcrumb = ({ filePath }: FileBreadcrumbProps) => {
                   {segment}
                 </BreadcrumbPage>
               ) : (
-                <span className='text-muted-foreground'>{segment}</span>
+                <BreadcrumbDropdown
+                  partialPath={partialPath}
+                  segment={segment}
+                />
               )}
             </BreadcrumbItem>
             {!isLast && <BreadcrumbSeparator />}
@@ -57,19 +146,25 @@ const FileBreadcrumb = ({ filePath }: FileBreadcrumbProps) => {
     } else {
       const firstSegment = pathSegments[0]
       const lastSegment = pathSegments[pathSegments.length - 1]
+      const firstPath = pathSegments[0]
 
       return (
         <>
           <BreadcrumbItem>
-            <span className='text-muted-foreground'>{firstSegment}</span>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbEllipsis />
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{lastSegment}</BreadcrumbPage>
-            </BreadcrumbItem>
+            <BreadcrumbDropdown
+              partialPath={firstPath}
+              segment={firstSegment}
+            />
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbEllipsis />
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage className='font-medium'>
+              {lastSegment}
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </>
       )
@@ -129,7 +224,11 @@ const FileExplorer = ({ files }: FileExplorerProps) => {
         {selectedFile && files[selectedFile] ? (
           <div className='flex h-full w-full flex-col'>
             <div className='bg-sidebar flex items-center justify-between gap-x-2 border-b px-4 py-2'>
-              <FileBreadcrumb filePath={selectedFile} />
+              <FileBreadcrumb
+                filePath={selectedFile}
+                onBreadcrumbClick={handleFileSelect}
+                availableFiles={Object.keys(files)}
+              />
               <Hint text='Copy to clipboard' side='bottom'>
                 <Button
                   variant='outline'
