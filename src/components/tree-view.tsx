@@ -1,4 +1,4 @@
-import { ChevronRightIcon, FileIcon, FolderIcon } from 'lucide-react'
+import { ChevronRightIcon } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +16,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from './ui/collapsible'
+import { getFileIcon, getFolderIcon, getIconUrl } from '@/lib/file-icons'
+import Image from 'next/image'
 
 export type TreeItem = string | [string, ...TreeItem[]]
 
@@ -40,7 +42,13 @@ const Tree = ({ item, selectedValue, onSelect, parentPath }: TreeProps) => {
         className='data-[active-true]:bg-transparent'
         onClick={() => onSelect?.(currentPath)}
       >
-        <FileIcon />
+        <Image
+          src={getIconUrl(getFileIcon(name))}
+          width={16}
+          height={16}
+          alt=''
+          className='h-4 w-4 flex-shrink-0'
+        />
         <span className='truncate'>{name}</span>
       </SidebarMenuButton>
     )
@@ -53,7 +61,13 @@ const Tree = ({ item, selectedValue, onSelect, parentPath }: TreeProps) => {
         <CollapsibleTrigger asChild>
           <SidebarMenuButton>
             <ChevronRightIcon className='transition-transform group-data-[state=open]/collapsible:rotate-90' />
-            <FolderIcon />
+            <Image
+              src={getIconUrl(getFolderIcon(name, false))}
+              width={16}
+              height={16}
+              alt=''
+              className='flex-shrink-0'
+            />
             <span className='truncate'>{name}</span>
           </SidebarMenuButton>
         </CollapsibleTrigger>

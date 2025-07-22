@@ -25,6 +25,8 @@ import {
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
+import { getFileIcon, getIconUrl } from '@/lib/file-icons'
+import Image from 'next/image'
 
 type FileCollection = { [path: string]: string }
 
@@ -84,22 +86,22 @@ const FileBreadcrumb = ({
 
     if (matchingFiles.length === 1) {
       return (
-        <button
-          className='text-muted-foreground hover:text-foreground cursor-pointer transition-colors'
+        <Button
+          variant='ghost'
           onClick={() => onBreadcrumbClick(matchingFiles[0])}
         >
           {segment}
-        </button>
+        </Button>
       )
     }
 
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className='text-muted-foreground hover:text-foreground flex cursor-pointer items-center gap-1 transition-colors'>
+          <Button variant='ghost'>
             {segment}
             <ChevronDownIcon className='h-3 w-3' />
-          </button>
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='start' className='max-h-64 overflow-y-auto'>
           {matchingFiles.map(filePath => {
@@ -108,8 +110,15 @@ const FileBreadcrumb = ({
               <DropdownMenuItem
                 key={filePath}
                 onClick={() => onBreadcrumbClick(filePath)}
-                className='cursor-pointer'
+                className='flex cursor-pointer items-center gap-2'
               >
+                <Image
+                  src={getIconUrl(getFileIcon(fileName))}
+                  width={16}
+                  height={16}
+                  alt=''
+                  className='flex-shrink-0'
+                />
                 {fileName}
               </DropdownMenuItem>
             )
