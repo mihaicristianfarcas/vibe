@@ -41,7 +41,7 @@ const ProjectHeader = ({ projectId }: Props) => {
             className='hover-bg-transparent pl-2! transition-opacity hover:opacity-75 focus-visible:ring-0'
           >
             <ThemeResponsiveLogo
-              className='h-8 w-8'
+              className='h-7 w-7'
               aria-label='Wolf Logo'
               role='img'
             />

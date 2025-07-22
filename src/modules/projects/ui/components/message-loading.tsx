@@ -60,7 +60,7 @@ const MessageLoading = () => {
     <div className='group flex flex-col px-2 pb-4'>
       <div className='mb-2 flex items-center gap-2 pl-2'>
         <ThemeResponsiveLogo
-          className='h-8 w-8'
+          className='h-7 w-7'
           aria-label='Wolf Logo'
           role='img'
         />
