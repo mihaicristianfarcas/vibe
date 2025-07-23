@@ -15,7 +15,7 @@ const Page = () => {
             className='hidden md:block'
           />
         </div>
-        <h1 className='text-center font-mono text-2xl font-semibold md:text-5xl'>
+        <h1 className='text-center font-mono text-2xl font-light md:text-5xl'>
           Build something with Vibe
         </h1>
         <p className='text-muted-foreground text-center text-lg md:text-xl'>
