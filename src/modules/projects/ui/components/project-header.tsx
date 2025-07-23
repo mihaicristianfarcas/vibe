@@ -1,4 +1,3 @@
-import ThemeResponsiveLogo from '@/components/theme-responsive-logo'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -15,7 +14,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useTRPC } from '@/trpc/client'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { ChevronDownIcon, ChevronLeftIcon, SunMoonIcon } from 'lucide-react'
+import {
+  AppWindowMacIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  SunMoonIcon
+} from 'lucide-react'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
 
@@ -40,11 +44,7 @@ const ProjectHeader = ({ projectId }: Props) => {
             size='sm'
             className='hover-bg-transparent pl-2! transition-opacity hover:opacity-75 focus-visible:ring-0'
           >
-            <ThemeResponsiveLogo
-              className='h-7 w-7'
-              aria-label='Wolf Logo'
-              role='img'
-            />
+            <AppWindowMacIcon />
             <span className='text-sm font-medium'>{project.name}</span>
             <ChevronDownIcon />
           </Button>

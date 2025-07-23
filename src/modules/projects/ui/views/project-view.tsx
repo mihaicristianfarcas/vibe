@@ -28,7 +28,7 @@ const ProjectView = ({ projectId }: Props) => {
     <div className='h-screen'>
       <ResizablePanelGroup direction='horizontal'>
         <ResizablePanel
-          defaultSize={35}
+          defaultSize={30}
           minSize={20}
           className='flex min-h-0 flex-col'
         >
@@ -43,8 +43,8 @@ const ProjectView = ({ projectId }: Props) => {
             />
           </Suspense>
         </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel defaultSize={65} minSize={50}>
+        <ResizableHandle className='hover:bg-primary transition-colors' />
+        <ResizablePanel defaultSize={70} minSize={50}>
           <Tabs
             className='h-full gap-y-0'
             defaultValue='preview'

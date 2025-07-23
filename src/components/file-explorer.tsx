@@ -341,7 +341,7 @@ const FileExplorer = ({ files }: FileExplorerProps) => {
           </div>
         )}
       </ResizablePanel>
-      <ResizableHandle />
+      <ResizableHandle className='hover:bg-primary transition-colors' />
       <ResizablePanel defaultSize={25} minSize={15} className='bg-sidebar'>
         <TreeView
           data={treeData}
