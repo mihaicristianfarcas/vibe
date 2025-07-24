@@ -4,15 +4,34 @@ import { Fragment, MessageRole, MessageType } from '@/generated/prisma'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { ChevronRightIcon, Code2Icon } from 'lucide-react'
+import { useUser } from '@clerk/nextjs'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 interface UserMessageProps {
   content: string
+  createdAt: Date
 }
 
-const UserMessage = ({ content }: UserMessageProps) => {
+const UserMessage = ({ content, createdAt }: UserMessageProps) => {
+  const { user } = useUser()
+
   return (
-    <div className='flex justify-end pr-2 pb-4 pl-10'>
-      <Card className='bg-muted max-w-[80%] rounded-lg border-none p-3 break-words shadow-none'>
+    <div className='group flex flex-col px-2 pb-4'>
+      <div className='mb-2 flex items-center justify-end gap-2 pr-2'>
+        <span className='text-muted-foreground text-xs opacity-0 transition-opacity group-hover:opacity-100'>
+          {format(createdAt, "HH:mm 'on' MMM dd, yyyy")}
+        </span>
+        <span className='text-md font-medium'>{user?.firstName || 'You'}</span>
+        <Avatar className='h-7 w-7'>
+          <AvatarImage src={user?.imageUrl} />
+          <AvatarFallback className='rounded-md text-xs'>
+            {user?.firstName?.[0] ||
+              user?.emailAddresses[0]?.emailAddress[0]?.toUpperCase() ||
+              'U'}
+          </AvatarFallback>
+        </Avatar>
+      </div>
+      <Card className='bg-muted mr-8.5 ml-auto max-w-[80%] rounded-lg border-none p-3 break-words shadow-none'>
         {content}
       </Card>
     </div>
@@ -83,8 +102,8 @@ const AssistantMessage = ({
           {format(createdAt, "HH:mm 'on' MMM dd, yyyy")}
         </span>
       </div>
-      <div className='flex flex-col gap-y-4 pl-8.5'>
-        <span>{content}</span>
+      <div className='flex flex-col gap-y-4 px-3'>
+        <span>{content.replace(/<task_summary>|<\/task_summary>/g, '')}</span>
         {fragment && type === 'RESULT' && (
           <FragmentCard
             fragment={fragment}
@@ -128,7 +147,7 @@ const MessageCard = ({
       />
     )
 
-  return <UserMessage content={content} />
+  return <UserMessage content={content} createdAt={createdAt} />
 }
 
 export default MessageCard
