@@ -2,6 +2,7 @@ import ProjectView from '@/modules/projects/ui/views/project-view'
 import { getQueryClient, trpc } from '@/trpc/server'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import { Suspense } from 'react'
+import { Spinner } from '@/components/ui/spinner'
 
 interface Props {
   params: Promise<{
@@ -21,7 +22,13 @@ const Page = async ({ params }: Props) => {
   )
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense
+        fallback={
+          <div className='flex h-screen items-center justify-center'>
+            <Spinner size='lg' />
+          </div>
+        }
+      >
         <ProjectView projectId={projectId} />
       </Suspense>
     </HydrationBoundary>

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import FileExplorer from '@/components/file-explorer'
 import UserControl from '@/components/user-control'
+import { Spinner } from '@/components/ui/spinner'
 
 interface Props {
   projectId: string
@@ -33,10 +34,27 @@ const ProjectView = ({ projectId }: Props) => {
           minSize={20}
           className='flex min-h-0 flex-col'
         >
-          <Suspense fallback={<p>Loading project...</p>}>
+          <Suspense
+            fallback={
+              <header className='flex items-center justify-between border-b p-2'>
+                <div className='flex items-center gap-2'>
+                  <Spinner size='sm' />
+                  <div className='bg-muted h-4 w-20 animate-pulse rounded' />
+                </div>
+              </header>
+            }
+          >
             <ProjectHeader projectId={projectId} />
           </Suspense>
-          <Suspense fallback={<p>Loading messages...</p>}>
+          <Suspense
+            fallback={
+              <div className='flex min-h-0 flex-1 flex-col'>
+                <div className='flex min-h-0 flex-1 items-center justify-center'>
+                  <Spinner />
+                </div>
+              </div>
+            }
+          >
             <MessagesContainer
               projectId={projectId}
               activeFragment={activeFragment}
