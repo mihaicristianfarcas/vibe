@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { PROJECT_TEMPLATES } from '../../constants'
+import { useClerk } from '@clerk/nextjs'
 
 const formSchema = z.object({
   value: z.string().min(1, { message: 'Message is required.' }).max(10000, {
@@ -34,6 +35,8 @@ const ProjectForm = () => {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
 
+  const clerk = useClerk()
+
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
       onSuccess: data => {
@@ -42,8 +45,7 @@ const ProjectForm = () => {
         router.push(`/projects/${data.id}`)
       },
       onError: error => {
-        // TODO Redirect to pricing page if related error
-        toast.error(error.message)
+        if (error.data?.code === 'UNAUTHORIZED') clerk.openSignIn()
       }
     })
   )
