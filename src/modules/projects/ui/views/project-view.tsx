@@ -36,10 +36,10 @@ const ProjectView = ({ projectId }: Props) => {
         >
           <Suspense
             fallback={
-              <header className='flex items-center justify-between border-b p-2'>
+              <header className='flex items-center justify-between border-b p-3'>
                 <div className='flex items-center gap-2'>
-                  <Spinner size='sm' />
-                  <div className='bg-muted h-4 w-20 animate-pulse rounded' />
+                  <Spinner />
+                  <div className='bg-muted h-6 w-20 animate-pulse rounded' />
                 </div>
               </header>
             }
