@@ -64,43 +64,45 @@ const ProjectView = ({ projectId }: Props) => {
         </ResizablePanel>
         <ResizableHandle className='hover:bg-primary transition-colors' />
         <ResizablePanel defaultSize={70} minSize={50}>
-          <Tabs
-            className='h-full gap-y-0'
-            defaultValue='preview'
-            value={tabState}
-            onValueChange={value => setTabState(value as 'preview' | 'code')}
-          >
-            <div className='flex w-full items-center gap-x-2 border-b p-2'>
-              <TabsList className='h-8 rounded-md border p-0'>
-                <TabsTrigger value='preview' className='rounded-md'>
-                  <EyeIcon />
-                  <span>Demo</span>
-                </TabsTrigger>
-                <TabsTrigger value='code' className='rounded-md'>
-                  <CodeIcon />
-                  <span>Code</span>
-                </TabsTrigger>
-              </TabsList>
-              <div className='ml-auto flex items-center gap-x-4'>
-                <Button asChild size='sm' variant='tertiary'>
-                  <Link href='/pricing'>
-                    <CrownIcon /> Upgrade
-                  </Link>
-                </Button>
-                <UserControl />
+          {activeFragment && (
+            <Tabs
+              className='h-full gap-y-0'
+              defaultValue='preview'
+              value={tabState}
+              onValueChange={value => setTabState(value as 'preview' | 'code')}
+            >
+              <div className='flex w-full items-center gap-x-2 border-b p-2'>
+                <TabsList className='h-8 rounded-md border p-0'>
+                  <TabsTrigger value='preview' className='rounded-md'>
+                    <EyeIcon />
+                    <span>Demo</span>
+                  </TabsTrigger>
+                  <TabsTrigger value='code' className='rounded-md'>
+                    <CodeIcon />
+                    <span>Code</span>
+                  </TabsTrigger>
+                </TabsList>
+                <div className='ml-auto flex items-center gap-x-4'>
+                  <Button asChild size='sm' variant='tertiary'>
+                    <Link href='/pricing'>
+                      <CrownIcon /> Upgrade
+                    </Link>
+                  </Button>
+                  <UserControl />
+                </div>
               </div>
-            </div>
-            <TabsContent value='preview'>
-              {!!activeFragment && <FragmentWeb data={activeFragment} />}
-            </TabsContent>
-            <TabsContent value='code' className='min-h-0'>
-              {!!activeFragment?.files && (
-                <FileExplorer
-                  files={activeFragment.files as { [path: string]: string }}
-                />
-              )}
-            </TabsContent>
-          </Tabs>
+              <TabsContent value='preview'>
+                {!!activeFragment && <FragmentWeb data={activeFragment} />}
+              </TabsContent>
+              <TabsContent value='code' className='min-h-0'>
+                {!!activeFragment?.files && (
+                  <FileExplorer
+                    files={activeFragment.files as { [path: string]: string }}
+                  />
+                )}
+              </TabsContent>
+            </Tabs>
+          )}
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
