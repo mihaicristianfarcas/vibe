@@ -6,6 +6,8 @@ import { format } from 'date-fns'
 import { ChevronRightIcon, Code2Icon } from 'lucide-react'
 import { useUser } from '@clerk/nextjs'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 interface UserMessageProps {
   content: string
@@ -32,7 +34,44 @@ const UserMessage = ({ content, createdAt }: UserMessageProps) => {
         </Avatar>
       </div>
       <Card className='bg-muted mr-8.5 ml-auto max-w-[80%] rounded-lg border-none p-3 break-words shadow-none'>
-        {content}
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            p: ({ children }) => <p className='mb-2 last:mb-0'>{children}</p>,
+            code: ({ children, className }) => {
+              const isInline = !className
+              return isInline ? (
+                <code className='bg-muted-foreground/20 rounded px-1 py-0.5 text-xs font-mono'>
+                  {children}
+                </code>
+              ) : (
+                <code className='block bg-muted-foreground/10 rounded p-2 text-xs font-mono overflow-x-auto'>
+                  {children}
+                </code>
+              )
+            },
+            pre: ({ children }) => (
+              <pre className='bg-muted-foreground/10 rounded p-2 overflow-x-auto'>
+                {children}
+              </pre>
+            ),
+            ul: ({ children }) => <ul className='list-disc pl-4 mb-2'>{children}</ul>,
+            ol: ({ children }) => <ol className='list-decimal pl-4 mb-2'>{children}</ol>,
+            li: ({ children }) => <li className='mb-1'>{children}</li>,
+            blockquote: ({ children }) => (
+              <blockquote className='border-l-4 border-muted-foreground/30 pl-4 italic'>
+                {children}
+              </blockquote>
+            ),
+            h1: ({ children }) => <h1 className='text-lg font-bold mb-2'>{children}</h1>,
+            h2: ({ children }) => <h2 className='text-base font-bold mb-2'>{children}</h2>,
+            h3: ({ children }) => <h3 className='text-sm font-bold mb-2'>{children}</h3>,
+            strong: ({ children }) => <strong className='font-semibold'>{children}</strong>,
+            em: ({ children }) => <em className='italic'>{children}</em>
+          }}
+        >
+          {content}
+        </ReactMarkdown>
       </Card>
     </div>
   )
@@ -103,7 +142,44 @@ const AssistantMessage = ({
         </span>
       </div>
       <div className='flex flex-col gap-y-4 px-3'>
-        <span>{content.replace(/<task_summary>|<\/task_summary>/g, '')}</span>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            p: ({ children }) => <p className='mb-2 last:mb-0'>{children}</p>,
+            code: ({ children, className }) => {
+              const isInline = !className
+              return isInline ? (
+                <code className='bg-muted-foreground/20 rounded px-1 py-0.5 text-xs font-mono'>
+                  {children}
+                </code>
+              ) : (
+                <code className='block bg-muted-foreground/10 rounded p-2 text-xs font-mono overflow-x-auto'>
+                  {children}
+                </code>
+              )
+            },
+            pre: ({ children }) => (
+              <pre className='bg-muted-foreground/10 rounded p-2 overflow-x-auto'>
+                {children}
+              </pre>
+            ),
+            ul: ({ children }) => <ul className='list-disc pl-4 mb-2'>{children}</ul>,
+            ol: ({ children }) => <ol className='list-decimal pl-4 mb-2'>{children}</ol>,
+            li: ({ children }) => <li className='mb-1'>{children}</li>,
+            blockquote: ({ children }) => (
+              <blockquote className='border-l-4 border-muted-foreground/30 pl-4 italic'>
+                {children}
+              </blockquote>
+            ),
+            h1: ({ children }) => <h1 className='text-lg font-bold mb-2'>{children}</h1>,
+            h2: ({ children }) => <h2 className='text-base font-bold mb-2'>{children}</h2>,
+            h3: ({ children }) => <h3 className='text-sm font-bold mb-2'>{children}</h3>,
+            strong: ({ children }) => <strong className='font-semibold'>{children}</strong>,
+            em: ({ children }) => <em className='italic'>{children}</em>
+          }}
+        >
+          {content.replace(/<task_summary>|<\/task_summary>/g, '')}
+        </ReactMarkdown>
         {fragment && type === 'RESULT' && (
           <FragmentCard
             fragment={fragment}
