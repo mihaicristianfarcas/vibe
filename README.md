@@ -65,7 +65,7 @@ complete with live previews.
 
    ```env
    # Database
-   DATABASE_URL="postgresql://username:password@localhost:5432/vibe"
+   DATABASE_URL="postgresql://..."
 
    # Clerk Authentication
    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
