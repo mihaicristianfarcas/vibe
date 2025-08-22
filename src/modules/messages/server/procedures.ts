@@ -11,6 +11,7 @@ export const messagesRouter = createTRPCRouter({
         value: z.string().min(1, { message: 'Value is required.' }).max(10000, {
           message: 'Value is too long'
         }),
+        imageContent: z.string().optional(),
         projectId: z.string().min(1, { message: 'Project ID is required.' })
       })
     )
@@ -41,6 +42,7 @@ export const messagesRouter = createTRPCRouter({
         name: 'code-agent/run',
         data: {
           value: input.value,
+          imageContent: input.imageContent,
           projectId: input.projectId
         }
       })

@@ -41,32 +41,44 @@ const UserMessage = ({ content, createdAt }: UserMessageProps) => {
             code: ({ children, className }) => {
               const isInline = !className
               return isInline ? (
-                <code className='bg-muted-foreground/20 rounded px-1 py-0.5 text-xs font-mono'>
+                <code className='bg-muted-foreground/20 rounded px-1 py-0.5 font-mono text-xs'>
                   {children}
                 </code>
               ) : (
-                <code className='block bg-muted-foreground/10 rounded p-2 text-xs font-mono overflow-x-auto'>
+                <code className='bg-muted-foreground/10 block overflow-x-auto rounded p-2 font-mono text-xs'>
                   {children}
                 </code>
               )
             },
             pre: ({ children }) => (
-              <pre className='bg-muted-foreground/10 rounded p-2 overflow-x-auto'>
+              <pre className='bg-muted-foreground/10 overflow-x-auto rounded p-2'>
                 {children}
               </pre>
             ),
-            ul: ({ children }) => <ul className='list-disc pl-4 mb-2'>{children}</ul>,
-            ol: ({ children }) => <ol className='list-decimal pl-4 mb-2'>{children}</ol>,
+            ul: ({ children }) => (
+              <ul className='mb-2 list-disc pl-4'>{children}</ul>
+            ),
+            ol: ({ children }) => (
+              <ol className='mb-2 list-decimal pl-4'>{children}</ol>
+            ),
             li: ({ children }) => <li className='mb-1'>{children}</li>,
             blockquote: ({ children }) => (
-              <blockquote className='border-l-4 border-muted-foreground/30 pl-4 italic'>
+              <blockquote className='border-muted-foreground/30 border-l-4 pl-4 italic'>
                 {children}
               </blockquote>
             ),
-            h1: ({ children }) => <h1 className='text-lg font-bold mb-2'>{children}</h1>,
-            h2: ({ children }) => <h2 className='text-base font-bold mb-2'>{children}</h2>,
-            h3: ({ children }) => <h3 className='text-sm font-bold mb-2'>{children}</h3>,
-            strong: ({ children }) => <strong className='font-semibold'>{children}</strong>,
+            h1: ({ children }) => (
+              <h1 className='mb-2 text-lg font-bold'>{children}</h1>
+            ),
+            h2: ({ children }) => (
+              <h2 className='mb-2 text-base font-bold'>{children}</h2>
+            ),
+            h3: ({ children }) => (
+              <h3 className='mb-2 text-sm font-bold'>{children}</h3>
+            ),
+            strong: ({ children }) => (
+              <strong className='font-semibold'>{children}</strong>
+            ),
             em: ({ children }) => <em className='italic'>{children}</em>
           }}
         >
@@ -149,32 +161,44 @@ const AssistantMessage = ({
             code: ({ children, className }) => {
               const isInline = !className
               return isInline ? (
-                <code className='bg-muted-foreground/20 rounded px-1 py-0.5 text-xs font-mono'>
+                <code className='bg-muted-foreground/20 rounded px-1 py-0.5 font-mono text-xs'>
                   {children}
                 </code>
               ) : (
-                <code className='block bg-muted-foreground/10 rounded p-2 text-xs font-mono overflow-x-auto'>
+                <code className='bg-muted-foreground/10 block overflow-x-auto rounded p-2 font-mono text-xs'>
                   {children}
                 </code>
               )
             },
             pre: ({ children }) => (
-              <pre className='bg-muted-foreground/10 rounded p-2 overflow-x-auto'>
+              <pre className='bg-muted-foreground/10 overflow-x-auto rounded p-2'>
                 {children}
               </pre>
             ),
-            ul: ({ children }) => <ul className='list-disc pl-4 mb-2'>{children}</ul>,
-            ol: ({ children }) => <ol className='list-decimal pl-4 mb-2'>{children}</ol>,
+            ul: ({ children }) => (
+              <ul className='mb-2 list-disc pl-4'>{children}</ul>
+            ),
+            ol: ({ children }) => (
+              <ol className='mb-2 list-decimal pl-4'>{children}</ol>
+            ),
             li: ({ children }) => <li className='mb-1'>{children}</li>,
             blockquote: ({ children }) => (
-              <blockquote className='border-l-4 border-muted-foreground/30 pl-4 italic'>
+              <blockquote className='border-muted-foreground/30 border-l-4 pl-4 italic'>
                 {children}
               </blockquote>
             ),
-            h1: ({ children }) => <h1 className='text-lg font-bold mb-2'>{children}</h1>,
-            h2: ({ children }) => <h2 className='text-base font-bold mb-2'>{children}</h2>,
-            h3: ({ children }) => <h3 className='text-sm font-bold mb-2'>{children}</h3>,
-            strong: ({ children }) => <strong className='font-semibold'>{children}</strong>,
+            h1: ({ children }) => (
+              <h1 className='mb-2 text-lg font-bold'>{children}</h1>
+            ),
+            h2: ({ children }) => (
+              <h2 className='mb-2 text-base font-bold'>{children}</h2>
+            ),
+            h3: ({ children }) => (
+              <h3 className='mb-2 text-sm font-bold'>{children}</h3>
+            ),
+            strong: ({ children }) => (
+              <strong className='font-semibold'>{children}</strong>
+            ),
             em: ({ children }) => <em className='italic'>{children}</em>
           }}
         >
